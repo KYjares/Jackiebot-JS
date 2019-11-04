@@ -1,8 +1,8 @@
 module.exports = {
   name: "ping",
-  description: "Ping!",
+  description: "Play a bit of tabletennis with me",
   cooldown: 5,
   execute(message, args) {
-    message.channel.send("Pong.");
+    message.reply(":ping_pong: pong!");
   }
 };

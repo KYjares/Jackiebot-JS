@@ -1,8 +1,8 @@
 const fs = require("fs");
 const Discord = require("discord.js");
 const { prefix, token } = require("./config.json");
-const client = new Discord.Client();
-client.commands = new Discord.Collection();
+const jackie = new Discord.Client();
+jackie.commands = new Discord.Collection();
 const commandFiles = fs
   .readdirSync("./commands")
   .filter(file => file.endsWith(".js"));
@@ -12,24 +12,31 @@ for (const file of commandFiles) {
 
   // set a new item in the Collection
   // with the key as the command name and the value as the exported module
-  client.commands.set(command.name, command);
+  jackie.commands.set(command.name, command);
 }
 
 const cooldowns = new Discord.Collection();
 
-client.once("ready", () => {
-  console.log("Ready!");
+jackie.once("ready", () => {
+  console.log(
+    `Good day father\nMy name is ${jackie.user.tag}\nMy ID is ${jackie.user.id}`
+  );
+
+  // await jackie.user.setPresence({
+  //   status: "online",
+  //   game: { name: "nice with her bot friends" }
+  // });
 });
 
-client.on("message", message => {
+jackie.on("message", message => {
   // console.log(message.content);
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
   const command =
-    client.commands.get(commandName) ||
-    client.commands.find(
+    jackie.commands.get(commandName) ||
+    jackie.commands.find(
       cmd => cmd.aliases && cmd.aliases.includes(commandName)
     );
 
@@ -84,4 +91,4 @@ client.on("message", message => {
   }
 });
 
-client.login(token);
+jackie.login(token);
