@@ -1,15 +1,28 @@
 module.exports = {
   name: "kick",
-  description: "Attempt to kick a user",
+  description: "When someone is missing a boot",
   guildOnly: true,
   execute(message, args) {
     if (!message.mentions.users.size) {
       return message.reply("you need to tag a user in order to kick them!");
     }
-    // grab the "first" mentioned user from the message
-    // this will return a `User` object, just like `message.author`
-    const taggedUser = message.mentions.users.first();
+    if (
+      message.member.roles.find(r => r.name === "Supreme Overlord") ||
+      message.member.roles.find(r => r.name === "Project: Ruka v2.0")
+    ) {
+      const taggedUser = message.mentions.users.first();
+      var kickUser = message.guild.member(taggedUser);
 
-    message.channel.send(`You wanted to kick: ${taggedUser.username}`);
+      kickUser
+        .kick()
+        .then(taggedUser => {
+          message.channel.send(
+            ":boot: BEGONE " + taggedUser.displayName + "!!!"
+          );
+        })
+        .catch(() => {
+          message.channel.send("Access Denied");
+        });
+    }
   }
 };
