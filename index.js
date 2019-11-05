@@ -17,15 +17,32 @@ for (const file of commandFiles) {
 
 const cooldowns = new Discord.Collection();
 
-jackie.once("ready", () => {
+changeStatus = async () => {
+  while (true) {
+    await jackie.user.setPresence({
+      status: "online",
+      game: { name: "nice with her bot friends" }
+    });
+    await new Promise(resolve => setTimeout(resolve, 10000));
+    await jackie.user.setPresence({
+      status: "dnd",
+      game: { name: "house" }
+    });
+    await new Promise(resolve => setTimeout(resolve, 10000));
+    await jackie.user.setPresence({
+      status: "idle",
+      game: { name: "Playing Playing" }
+    });
+    await new Promise(resolve => setTimeout(resolve, 10000));
+  }
+};
+
+jackie.on("ready", async () => {
   console.log(
     `Good day father\nMy name is ${jackie.user.tag}\nMy ID is ${jackie.user.id}`
   );
 
-  // await jackie.user.setPresence({
-  //   status: "online",
-  //   game: { name: "nice with her bot friends" }
-  // });
+  changeStatus();
 });
 
 jackie.on("message", message => {
