@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "discord-youtube-api": "^0.1.0",
     "discord.js": "^11.5.1",
     "urban": "^0.3.2"
   }
