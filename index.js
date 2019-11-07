@@ -45,6 +45,19 @@ jackie.on("ready", async () => {
   changeStatus();
 });
 
+/* 
+jackie.on("messageReactionAdd", (messageReaction, user) => {
+  messageReaction.message.channel.send(
+    user.username +
+      " has reacted " +
+      messageReaction.emoji +
+      ' to the message "' +
+      messageReaction.message +
+      '"'
+  );
+});
+*/
+
 jackie.on("message", message => {
   // console.log(message.content);
   if (!message.content.startsWith(prefix) || message.author.bot) return;
