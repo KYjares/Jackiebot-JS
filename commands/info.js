@@ -1,28 +1,32 @@
 const Discord = require("discord.js");
 
 module.exports = {
-  name: "server",
-  description: "Show a summary of the server",
+  name: "info",
+  description: "User's ID card",
   execute(message, args) {
-    const server = message.guild;
+    let taggedUser, user;
 
-    const serverEmbed = new Discord.RichEmbed()
+    if (!message.mentions.users.size) {
+      taggedUser = message.author;
+      user = message.guild.member(taggedUser);
+    } else {
+      taggedUser = message.mentions.users.first();
+      user = message.guild.member(taggedUser);
+    }
+
+    const userEmbed = new Discord.RichEmbed()
       .setColor("0xffd465")
-      .setTitle(server.name + "'s info")
-      .setDescription("Some more dirt for you")
+      .setTitle(user.displayName + "'s info")
+      .setDescription("Here's some dirt on them")
       // .addBlankField()
-      .addField("Name", server.name, true)
-      .addField("ID", server.id, true)
-      // WORK ON DISPLAYING
-      // .addField("Roles", server.roles, true)
-      // .addField(
-      //   "Members",
-      //   server.members.forEach(member => member.displayName),
-      //   true
-      // )
-      .setThumbnail(server.iconURL);
+      .addField("Name", user.displayName, true)
+      .addField("ID", user.id, true)
+      .addField("Status", user.presence.status, true)
+      .addField("Highest Role", user.highestRole.name, true)
+      .addField("Joined at", user.joinedAt, true)
+      .setThumbnail(user.user.avatarURL);
 
-    message.channel.send(serverEmbed);
+    message.channel.send(userEmbed);
   }
 };
 

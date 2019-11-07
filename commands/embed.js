@@ -1,28 +1,18 @@
 const Discord = require("discord.js");
 
 module.exports = {
-  name: "server",
-  description: "Show a summary of the server",
+  name: "embed",
+  description: "Stick your stuff into a well",
   execute(message, args) {
-    const server = message.guild;
-
-    const serverEmbed = new Discord.RichEmbed()
+    const exampleEmbed = new Discord.RichEmbed()
       .setColor("0xffd465")
-      .setTitle(server.name + "'s info")
-      .setDescription("Some more dirt for you")
-      // .addBlankField()
-      .addField("Name", server.name, true)
-      .addField("ID", server.id, true)
-      // WORK ON DISPLAYING
-      // .addField("Roles", server.roles, true)
-      // .addField(
-      //   "Members",
-      //   server.members.forEach(member => member.displayName),
-      //   true
-      // )
-      .setThumbnail(server.iconURL);
+      .setTitle("pak ganern")
+      .setDescription("lodi petmalu")
+      .setAuthor("Cascade")
+      .addField("name", "value", true)
+      .setFooter("foot");
 
-    message.channel.send(serverEmbed);
+    message.channel.send(exampleEmbed);
   }
 };
 
