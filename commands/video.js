@@ -7,6 +7,7 @@ const Discord = require("discord.js");
 module.exports = {
   name: "video",
   description: "Youtube search",
+  aliases: ["youtube", "yt", "vid"],
   async execute(message, args) {
     let video;
     if (!args) {
