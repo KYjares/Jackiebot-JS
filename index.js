@@ -1,6 +1,6 @@
 const fs = require("fs");
 const Discord = require("discord.js");
-const { prefix, token } = require("./config.json");
+const { prefix, token, badWords } = require("./config.json");
 const jackie = new Discord.Client();
 jackie.commands = new Discord.Collection();
 const commandFiles = fs
@@ -60,6 +60,12 @@ jackie.on("messageReactionAdd", (messageReaction, user) => {
 
 jackie.on("message", message => {
   // console.log(message.content);
+  for (const word of badWords) {
+    if (new RegExp(message.content).test("\b" + word + "\b", "g")) {
+      message.delete();
+      message.channel.send("A bad word was said :angry:");
+    }
+  }
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).split(/ +/);
