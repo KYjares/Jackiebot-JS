@@ -1,11 +1,12 @@
 const fs = require("fs");
 const Discord = require("discord.js");
-const { prefix, token, badWords } = require("./config.json");
+require("dotenv").config();
 const jackie = new Discord.Client();
 jackie.commands = new Discord.Collection();
 const commandFiles = fs
   .readdirSync("./commands")
   .filter(file => file.endsWith(".js"));
+var badWords = process.env.BAD_WORDS.split(",");
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
@@ -61,14 +62,15 @@ jackie.on("messageReactionAdd", (messageReaction, user) => {
 jackie.on("message", message => {
   // console.log(message.content);
   for (const word of badWords) {
-    if (new RegExp(message.content).test("\b" + word + "\b", "g")) {
+    if (new RegExp(message.content).test(word, "g")) {
       message.delete();
       message.channel.send("A bad word was said :angry:");
     }
   }
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  if (!message.content.startsWith(process.env.PREFIX) || message.author.bot)
+    return;
 
-  const args = message.content.slice(prefix.length).split(/ +/);
+  const args = message.content.slice(process.env.PREFIX.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
   const command =
     jackie.commands.get(commandName) ||
@@ -127,4 +129,4 @@ jackie.on("message", message => {
   }
 });
 
-jackie.login(token);
+jackie.login(process.env.TOKEN);

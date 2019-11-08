@@ -1,7 +1,7 @@
 const YouTube = require("discord-youtube-api");
-const { youtubeAPI } = require("../config.json");
+require("dotenv").config();
 
-const youtube = new YouTube(youtubeAPI);
+const youtube = new YouTube(process.env.YOUTUBE_API);
 const Discord = require("discord.js");
 
 module.exports = {
