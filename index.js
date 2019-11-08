@@ -6,7 +6,7 @@ jackie.commands = new Discord.Collection();
 const commandFiles = fs
   .readdirSync("./commands")
   .filter(file => file.endsWith(".js"));
-var badWords = process.env.BAD_WORDS.split(",");
+const badWords = process.env.BAD_WORDS.split(", ");
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
@@ -61,12 +61,26 @@ jackie.on("messageReactionAdd", (messageReaction, user) => {
 
 jackie.on("message", message => {
   // console.log(message.content);
+  //Swear checker
+  /*
   for (const word of badWords) {
-    if (new RegExp(message.content).test(word, "g")) {
+    let re_pattern = `(?:^|\\W)${message.content.replace(
+      /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
+      "\\$&"
+    )}(?!\\w)`;
+    let detect = new RegExp(word, "gi");
+    let res = [],
+      m;
+
+    while ((m = detect.exec(re_pattern))) {
+      res.push(m[1]);
+    }
+    if (res.length > 0) {
       message.delete();
-      message.channel.send("A bad word was said :angry:");
+      message.channel.send("A bad word was said :rage:");
     }
   }
+  */
   if (!message.content.startsWith(process.env.PREFIX) || message.author.bot)
     return;
 
