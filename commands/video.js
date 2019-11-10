@@ -25,6 +25,7 @@ module.exports = {
     //   .setThumbnail(video.url);
 
     message.channel.send(video.title);
+    message.channel.send(video.description.substr(0,100) + "...");
     message.channel.send(video.url);
   }
 };
