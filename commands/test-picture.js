@@ -1,9 +1,8 @@
 const Discord = require("discord.js");
 
 module.exports = {
-  name: "picture",
+  name: "test-picture",
   description: "Picture upload test",
-  aliases: ["pic", "img", "image"],
   execute(message, args) {
     const localEmbed = new Discord.RichEmbed()
       .setColor("0xffd465")

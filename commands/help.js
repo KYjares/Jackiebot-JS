@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 module.exports = {
   name: "help",
   description: "List all of my commands or info about a specific command.",
@@ -12,7 +14,7 @@ module.exports = {
       data.push("Here's a list of all my commands:");
       data.push(commands.map(command => command.name).join(", "));
       data.push(
-        `\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`
+        `\nYou can send \`${process.env.PREFIX}help [command name]\` to get info on a specific command!`
       );
 
       return message.author
@@ -48,7 +50,9 @@ module.exports = {
     if (command.description)
       data.push(`**Description:** ${command.description}`);
     if (command.usage)
-      data.push(`**Usage:** ${prefix}${command.name} ${command.usage}`);
+      data.push(
+        `**Usage:** ${process.env.PREFIX}${command.name} ${command.usage}`
+      );
 
     data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
 
