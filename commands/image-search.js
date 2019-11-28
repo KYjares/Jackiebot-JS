@@ -1,8 +1,10 @@
 const { RichEmbed, Attachment } = require("discord.js");
 const GoogleImages = require("google-images");
+require("dotenv").config();
+
 const images = new GoogleImages(
-  "017633256158255554062:3lkbk9e70f4",
-  "AIzaSyCGeKUK71Nnf9J7v-cG13P4dYuZdR812qg"
+  process.env.GOOGLE_CSE_ID,
+  process.env.GOOGLE_IMAGE_API
 );
 
 module.exports = {
