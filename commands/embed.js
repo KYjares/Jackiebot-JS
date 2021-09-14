@@ -1,19 +1,19 @@
 const Discord = require("discord.js");
 
 module.exports = {
-  name: "embed",
-  description: "Stick your stuff into a well",
-  execute(message, args) {
-    const exampleEmbed = new Discord.RichEmbed()
-      .setColor("0xffd465")
-      .setTitle("pak ganern")
-      .setDescription("lodi petmalu")
-      .setAuthor("Cascade")
-      .addField("name", "value", true)
-      .setFooter("foot");
+	name: "embed",
+	description: "Stick your stuff into a well",
+	execute(message, args) {
+		const exampleEmbed = new Discord.MessageEmbed()
+			.setColor("0xffd465")
+			.setTitle("pak ganern")
+			.setDescription("lodi petmalu")
+			.setAuthor("Cascade")
+			.addField("name", "value", true)
+			.setFooter("foot");
 
-    message.channel.send(exampleEmbed);
-  }
+		message.channel.send({ embeds: [exampleEmbed] });
+	},
 };
 
 //   .setColor('#0099ff')

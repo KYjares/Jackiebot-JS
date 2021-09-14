@@ -1,60 +1,70 @@
-const { RichEmbed, Attachment } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const GoogleImages = require("google-images");
 require("dotenv").config();
 
 const images = new GoogleImages(
-  process.env.GOOGLE_CSE_ID,
-  process.env.GOOGLE_IMAGE_API
+	process.env.GOOGLE_CSE_ID,
+	process.env.GOOGLE_IMAGE_API
 );
 
 module.exports = {
-  name: "image-search",
-  description: "Fuck notso's image search",
-  aliases: ["pic", "img", "image"],
-  async execute(message, args) {
-    try {
-      let [result] = "";
-      if (!args) {
-        [result] = await images.search("nibbah", { page: 1 });
-      } else {
-        let term = args.toString();
-        let cleanTerm = term.replace(/,/g, " ");
-        [result] = await images.search(cleanTerm, { page: 1 });
-      }
+	name: "image-search",
+	description: "Fuck notso's image search",
+	aliases: ["pic", "img", "image"],
+	async execute(message, args) {
+		try {
+			let [result] = "";
+			if (!args) {
+				[result] = await images.search("nibbah", { page: 1 });
+			} else {
+				let term = args.toString();
+				let cleanTerm = term.replace(/,/g, " ");
+				[result] = await images.search(cleanTerm, { page: 1 });
+			}
 
-      if (!result) return await message.channel.send(":x: No images found!");
+			if (!result) return await message.channel.send(":x: No images found!");
 
-      //   const attachment = new Attachment(result.url);
-      const imageEmbed = new RichEmbed()
-        .setColor("0xffd465")
-        .setImage(result.url);
+			//   const attachment = new Attachment(result.url);
+			const imageEmbed = new MessageEmbed()
+				.setColor("0xffd465")
+				.setImage(result.url);
 
-      let imageReaction = await message.channel.send(imageEmbed);
-      imageReaction.react("◀️").then(() => imageReaction.react("▶️"));
+			const row = new MessageActionRow().addComponents(
+				new MessageButton()
+					.setCustomId("primary")
+					.setLabel("Primary")
+					.setStyle("PRIMARY"),
+				new MessageButton()
+					.setCustomId("secondary")
+					.setLabel("Secondary")
+					.setStyle("SECONDARY")
+			);
 
-      //   const filter = reaction => {
-      //     return ["◀️", "▶️"].includes(reaction.emoji.name);
-      //   };
-      //   imageReaction.awaitReactions(filter, { time: 15000, errors: ["time"] });
-      // .then(collected => {
-      //   const reaction = collected.first();
-      //   if (reaction.emoji.name === "◀️") {
-      //     message.reply("back");
-      //     return ["◀️", "▶️"].includes(reaction.emoji.name);
-      //   } else if (reaction.emoji.name === "▶️") {
-      //     message.reply("forward");
-      //   }
-      // })
-      // .catch(collected => {
-      //   console.log(
-      //     `After a minute, only ${collected.size} out of 2 reacted.`
-      //   );
-      //   message.reply("you didn't react");
-      // });
-    } catch (err) {
-      console.error(err);
-    }
-  }
+			message.channel.send({ embeds: [imageEmbed], components: [row] });
+
+			//   const filter = reaction => {
+			//     return ["◀️", "▶️"].includes(reaction.emoji.name);
+			//   };
+			//   imageReaction.awaitReactions(filter, { time: 15000, errors: ["time"] });
+			// .then(collected => {
+			//   const reaction = collected.first();
+			//   if (reaction.emoji.name === "◀️") {
+			//     message.reply("back");
+			//     return ["◀️", "▶️"].includes(reaction.emoji.name);
+			//   } else if (reaction.emoji.name === "▶️") {
+			//     message.reply("forward");
+			//   }
+			// })
+			// .catch(collected => {
+			//   console.log(
+			//     `After a minute, only ${collected.size} out of 2 reacted.`
+			//   );
+			//   message.reply("you didn't react");
+			// });
+		} catch (err) {
+			console.error(err);
+		}
+	},
 };
 
 //   client.search('Steve Angello')

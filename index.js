@@ -1,7 +1,10 @@
 const fs = require("fs");
+const { Client, Intents } = require("discord.js");
 const Discord = require("discord.js");
 require("dotenv").config();
-const jackie = new Discord.Client();
+const jackie = new Client({
+	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+});
 jackie.commands = new Discord.Collection();
 const commandFiles = fs
 	.readdirSync("./commands")
@@ -58,7 +61,7 @@ jackie.on("messageReactionAdd", (messageReaction, user) => {
 });
 */
 
-jackie.on("message", (message) => {
+jackie.on("messageCreate", (message) => {
 	// console.log(message.content);
 	//Swear checker
 	/*
