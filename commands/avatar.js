@@ -1,16 +1,26 @@
+const Discord = require("discord.js");
+
 module.exports = {
 	name: "avatar",
 	description: "Display mentioned user(s) avatar(s)",
 	aliases: ["icon", "pfp"],
 	execute(message, args) {
 		if (!message.mentions.users.size) {
-			return message.channel.send(
-				`Your avatar: <${message.author.displayAvatarURL}>`
-			);
+			const avatarEmbed = new Discord.MessageEmbed()
+				.setAuthor(`Your Avatar`)
+				.setImage(
+					`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=256`
+				);
+			message.channel.send({ embeds: [avatarEmbed] });
 		}
 
 		const avatarList = message.mentions.users.map((user) => {
-			return `${user.username}'s avatar: <${user.displayAvatarURL}>`;
+			const avatarEmbed = new Discord.MessageEmbed()
+				.setAuthor(`${user.username}'s Avatar`)
+				.setImage(
+					`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
+				);
+			message.channel.send({ embeds: [avatarEmbed] });
 		});
 
 		// send the entire array of strings as a message
