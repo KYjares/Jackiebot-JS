@@ -2,7 +2,11 @@ const fs = require("fs");
 const { Client, Collection, Intents } = require("discord.js");
 require("dotenv").config();
 const jackie = new Client({
-	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+	intents: [
+		Intents.FLAGS.GUILDS,
+		Intents.FLAGS.GUILD_MESSAGES,
+		Intents.FLAGS.DIRECT_MESSAGES,
+	],
 });
 jackie.commands = new Collection();
 const commandFiles = fs

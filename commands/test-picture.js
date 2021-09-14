@@ -7,16 +7,10 @@ module.exports = {
 		const localEmbed = new Discord.MessageEmbed()
 			.setColor("0xffd465")
 			//Local
-			.attachFiles([
-				"./assets/hs.jpg",
-				"./assets/a.jpg",
-				"./assets/c.png",
-				"./assets/p.gif",
-			])
-			.setImage("attachment://hs.jpg")
-			.setImage("attachment://a.jpg")
-			.setImage("attachment://c.png")
-			.setImage("attachment://p.gif");
+			.setImage("./assets/hs.jpg")
+			.setImage("./assets/a.jpg")
+			.setImage("./assets/c.png")
+			.setImage("./assets/p.gif");
 
 		message.channel.send({ embeds: [localEmbed] });
 

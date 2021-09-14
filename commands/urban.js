@@ -4,6 +4,7 @@ const Discord = require("discord.js");
 module.exports = {
 	name: "urban",
 	description: "Search for the internet's definition",
+	args: true,
 	execute(message, args) {
 		let term = args.toString();
 		let cleanTerm = term.replace(/,/g, " ");
@@ -26,7 +27,7 @@ module.exports = {
 					true
 				);
 
-			message.channel.send({ embeds: [unbanEmbed] });
+			message.channel.send({ embeds: [urbanEmbed] });
 		});
 	},
 };
