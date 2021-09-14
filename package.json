@@ -13,6 +13,9 @@
     "discord.js": "^11.5.1",
     "dotenv": "^8.2.0",
     "google-images": "^2.1.0",
-    "urban": "^0.3.2"
+    "urban": "^0.3.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0"
   }
 }
