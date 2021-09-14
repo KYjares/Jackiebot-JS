@@ -4,46 +4,45 @@ require("dotenv").config();
 const jackie = new Discord.Client();
 jackie.commands = new Discord.Collection();
 const commandFiles = fs
-  .readdirSync("./commands")
-  .filter(file => file.endsWith(".js"));
-const badWords = process.env.BAD_WORDS.split(", ");
+	.readdirSync("./commands")
+	.filter((file) => file.endsWith(".js"));
 
 for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
+	const command = require(`./commands/${file}`);
 
-  // set a new item in the Collection
-  // with the key as the command name and the value as the exported module
-  jackie.commands.set(command.name, command);
+	// set a new item in the Collection
+	// with the key as the command name and the value as the exported module
+	jackie.commands.set(command.name, command);
 }
 
 const cooldowns = new Discord.Collection();
 
 changeStatus = async () => {
-  while (true) {
-    await jackie.user.setPresence({
-      status: "online",
-      game: { name: "nice with her bot friends" }
-    });
-    await new Promise(resolve => setTimeout(resolve, 10000));
-    await jackie.user.setPresence({
-      status: "dnd",
-      game: { name: "house" }
-    });
-    await new Promise(resolve => setTimeout(resolve, 10000));
-    await jackie.user.setPresence({
-      status: "idle",
-      game: { name: "Playing Playing" }
-    });
-    await new Promise(resolve => setTimeout(resolve, 10000));
-  }
+	while (true) {
+		await jackie.user.setPresence({
+			status: "online",
+			game: { name: "nice with her bot friends" },
+		});
+		await new Promise((resolve) => setTimeout(resolve, 10000));
+		await jackie.user.setPresence({
+			status: "dnd",
+			game: { name: "house" },
+		});
+		await new Promise((resolve) => setTimeout(resolve, 10000));
+		await jackie.user.setPresence({
+			status: "idle",
+			game: { name: "Playing Playing" },
+		});
+		await new Promise((resolve) => setTimeout(resolve, 10000));
+	}
 };
 
 jackie.on("ready", async () => {
-  console.log(
-    `Good day father\nMy name is ${jackie.user.tag}\nMy ID is ${jackie.user.id}`
-  );
+	console.log(
+		`Good day father\nMy name is ${jackie.user.tag}\nMy ID is ${jackie.user.id}`
+	);
 
-  changeStatus();
+	changeStatus();
 });
 
 /* 
@@ -59,10 +58,10 @@ jackie.on("messageReactionAdd", (messageReaction, user) => {
 });
 */
 
-jackie.on("message", message => {
-  // console.log(message.content);
-  //Swear checker
-  /*
+jackie.on("message", (message) => {
+	// console.log(message.content);
+	//Swear checker
+	/*
   for (const word of badWords) {
     let re_pattern = `(?:^|\\W)${message.content.replace(
       /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
@@ -81,66 +80,66 @@ jackie.on("message", message => {
     }
   }
   */
-  if (!message.content.startsWith(process.env.PREFIX) || message.author.bot)
-    return;
+	if (!message.content.startsWith(process.env.PREFIX) || message.author.bot)
+		return;
 
-  const args = message.content.slice(process.env.PREFIX.length).split(/ +/);
-  const commandName = args.shift().toLowerCase();
-  const command =
-    jackie.commands.get(commandName) ||
-    jackie.commands.find(
-      cmd => cmd.aliases && cmd.aliases.includes(commandName)
-    );
+	const args = message.content.slice(process.env.PREFIX.length).split(/ +/);
+	const commandName = args.shift().toLowerCase();
+	const command =
+		jackie.commands.get(commandName) ||
+		jackie.commands.find(
+			(cmd) => cmd.aliases && cmd.aliases.includes(commandName)
+		);
 
-  if (!command) return;
+	if (!command) return;
 
-  //check if command is server only
-  if (command.guildOnly && message.channel.type !== "text") {
-    return message.reply("I can't execute that command inside DMs!");
-  }
+	//check if command is server only
+	if (command.guildOnly && message.channel.type !== "text") {
+		return message.reply("I can't execute that command inside DMs!");
+	}
 
-  //check arguments
-  if (command.args && !args.length) {
-    let reply = `You didn't provide any arguments, ${message.author}!`;
+	//check arguments
+	if (command.args && !args.length) {
+		let reply = `You didn't provide any arguments, ${message.author}!`;
 
-    if (command.usage) {
-      reply += `\nThe proper usage would be: \`${process.env.PREFIX}${command.name} ${command.usage}\``;
-    }
+		if (command.usage) {
+			reply += `\nThe proper usage would be: \`${process.env.PREFIX}${command.name} ${command.usage}\``;
+		}
 
-    return message.channel.send(reply);
-  }
+		return message.channel.send(reply);
+	}
 
-  //cooldown
-  if (!cooldowns.has(command.name)) {
-    cooldowns.set(command.name, new Discord.Collection());
-  }
+	//cooldown
+	if (!cooldowns.has(command.name)) {
+		cooldowns.set(command.name, new Discord.Collection());
+	}
 
-  const now = Date.now();
-  const timestamps = cooldowns.get(command.name);
-  const cooldownAmount = (command.cooldown || 3) * 1000;
+	const now = Date.now();
+	const timestamps = cooldowns.get(command.name);
+	const cooldownAmount = (command.cooldown || 3) * 1000;
 
-  if (timestamps.has(message.author.id)) {
-    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+	if (timestamps.has(message.author.id)) {
+		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
-    if (now < expirationTime) {
-      const timeLeft = (expirationTime - now) / 1000;
-      return message.reply(
-        `please wait ${timeLeft.toFixed(
-          1
-        )} more second(s) before reusing the \`${command.name}\` command.`
-      );
-    }
-  }
+		if (now < expirationTime) {
+			const timeLeft = (expirationTime - now) / 1000;
+			return message.reply(
+				`please wait ${timeLeft.toFixed(
+					1
+				)} more second(s) before reusing the \`${command.name}\` command.`
+			);
+		}
+	}
 
-  timestamps.set(message.author.id, now);
-  setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+	timestamps.set(message.author.id, now);
+	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
-  try {
-    command.execute(message, args);
-  } catch (error) {
-    console.error(error);
-    message.reply("there was an error trying to execute that command!");
-  }
+	try {
+		command.execute(message, args);
+	} catch (error) {
+		console.error(error);
+		message.reply("there was an error trying to execute that command!");
+	}
 });
 
 jackie.login(process.env.TOKEN);
