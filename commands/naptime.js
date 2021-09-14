@@ -7,6 +7,7 @@ module.exports = {
 		message.channel.send("Cyke!");
 		await new Promise((resolve) => setTimeout(resolve, 2000));
 		message.channel.send("Double cyke, later nerds");
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 		await message.client.destroy();
 	},
 };
