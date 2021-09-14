@@ -97,7 +97,7 @@ jackie.on("messageCreate", (message) => {
 	if (!command) return;
 
 	//check if command is server only
-	if (command.guildOnly && message.channel.type !== "text") {
+	if (command.guildOnly && message.channel.type !== "GUILD_TEXT") {
 		return message.reply("I can't execute that command inside DMs!");
 	}
 

@@ -7,11 +7,11 @@ module.exports = {
 			return message.reply("you need to tag a user in order to kick them!");
 		}
 		if (
-			message.member.roles.find((r) => r.name === "Supreme Overlord") ||
-			message.member.roles.find((r) => r.name === "Project: Ruka v2.0")
+			message.member.roles.cache.find((r) => r.name === "Supreme Overlord") ||
+			message.member.roles.cache.find((r) => r.name === "Project: Ruka v2.0")
 		) {
 			const taggedUser = message.mentions.users.first();
-			var banUser = message.guild.member(taggedUser);
+			var banUser = message.guild.members.cache.get(taggedUser.id);
 
 			banUser
 				.ban()
