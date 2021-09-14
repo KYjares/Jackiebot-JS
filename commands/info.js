@@ -3,28 +3,31 @@ const Discord = require("discord.js");
 module.exports = {
 	name: "info",
 	description: "User's ID card",
-	execute(message, args) {
-		let taggedUser, user;
+	async execute(message, args) {
+		var taggedUser, user;
 
 		if (!message.mentions.users.size) {
-			taggedUser = message.author;
-			user = message.guild.member(taggedUser);
+			taggedUser = await message.author;
+			guildUser = await message.guild.members.fetch(taggedUser.id);
+			//console.log("poop", message.guild.members.cache.get(taggedUser.id));
 		} else {
-			taggedUser = message.mentions.users.first();
-			user = message.guild.member(taggedUser);
+			taggedUser = await message.mentions.users.first();
+			guildUser = await message.guild.members.fetch(taggedUser.id);
 		}
 
 		const userEmbed = new Discord.MessageEmbed()
 			.setColor("0xffd465")
-			.setTitle(user.displayName + "'s info")
+			.setTitle(guildUser.user.displayName + "'s info")
 			.setDescription("Here's some dirt on them")
 			// .addBlankField()
-			.addField("Name", user.displayName, true)
-			.addField("ID", user.id, true)
-			.addField("Status", user.presence.status, true)
-			.addField("Highest Role", user.highestRole.name, true)
-			.addField("Joined at", user.joinedAt, true)
-			.setThumbnail(user.user.avatarURL);
+			.addField("Name", guildUser.user.username, true)
+			.addField("ID", guildUser.user.id, true)
+			//.addField("Status", guildUser.user.presence.status, true)
+			.addField("Highest Role", guildUser.roles.highest.name, true)
+			//.addField("Joined at", guildUser.joinedAt, true)
+			.setThumbnail(
+				`https://cdn.discordapp.com/avatars/${guildUser.user.id}/${guildUser.user.avatar}.png?size=256`
+			);
 
 		message.channel.send({ embeds: [userEmbed] });
 	},

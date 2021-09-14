@@ -1,11 +1,10 @@
 const fs = require("fs");
-const { Client, Intents } = require("discord.js");
-const Discord = require("discord.js");
+const { Client, Collection, Intents } = require("discord.js");
 require("dotenv").config();
 const jackie = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
-jackie.commands = new Discord.Collection();
+jackie.commands = new Collection();
 const commandFiles = fs
 	.readdirSync("./commands")
 	.filter((file) => file.endsWith(".js"));
@@ -18,7 +17,7 @@ for (const file of commandFiles) {
 	jackie.commands.set(command.name, command);
 }
 
-const cooldowns = new Discord.Collection();
+const cooldowns = new Collection();
 
 changeStatus = async () => {
 	while (true) {
@@ -114,7 +113,7 @@ jackie.on("messageCreate", (message) => {
 
 	//cooldown
 	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
+		cooldowns.set(command.name, new Collection());
 	}
 
 	const now = Date.now();
