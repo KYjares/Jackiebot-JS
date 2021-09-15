@@ -9,7 +9,6 @@ module.exports = {
 		if (!message.mentions.users.size) {
 			taggedUser = await message.author;
 			guildUser = await message.guild.members.fetch(taggedUser.id);
-			//console.log("poop", message.guild.members.cache.get(taggedUser.id));
 		} else {
 			taggedUser = await message.mentions.users.first();
 			guildUser = await message.guild.members.fetch(taggedUser.id);
@@ -17,7 +16,7 @@ module.exports = {
 
 		const userEmbed = new Discord.MessageEmbed()
 			.setColor("0xffd465")
-			.setTitle(guildUser.user.displayName + "'s info")
+			.setTitle((guildUser.nickname || guildUser.user.username) + "'s info")
 			.setDescription("Here's some dirt on them")
 			// .addBlankField()
 			.addField("Name", guildUser.user.username, true)
