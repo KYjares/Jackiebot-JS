@@ -10,17 +10,17 @@ const images = new GoogleImages(
 module.exports = {
 	name: "image-search",
 	description: "Fuck notso's image search",
+	args: true,
 	aliases: ["pic", "img", "image"],
 	async execute(message, args) {
 		try {
+			var page = 1;
+			var term, cleanTerm;
 			let [result] = "";
-			if (!args) {
-				[result] = await images.search("nibbah", { page: 1 });
-			} else {
-				let term = args.toString();
-				let cleanTerm = term.replace(/,/g, " ");
-				[result] = await images.search(cleanTerm, { page: 1 });
-			}
+
+			term = args.toString();
+			cleanTerm = term.replace(/,/g, " ");
+			[result] = await images.search(cleanTerm, { page: page });
 
 			if (!result) return await message.channel.send(":x: No images found!");
 
@@ -32,35 +32,42 @@ module.exports = {
 			const row = new MessageActionRow().addComponents(
 				new MessageButton()
 					.setCustomId("primary")
-					.setLabel("Primary")
+					.setLabel("Previous Image")
 					.setStyle("PRIMARY"),
 				new MessageButton()
 					.setCustomId("secondary")
-					.setLabel("Secondary")
-					.setStyle("SECONDARY")
+					.setLabel("Next Image")
+					.setStyle("PRIMARY")
 			);
 
-			message.channel.send({ embeds: [imageEmbed], components: [row] });
+			message.channel
+				.send({ embeds: [imageEmbed], components: [row] })
+				.then((msg) => {
+					const filter = (m) => m.user.id === message.author.id;
+					const collector = message.channel.createMessageComponentCollector({
+						filter,
+					});
 
-			//   const filter = reaction => {
-			//     return ["◀️", "▶️"].includes(reaction.emoji.name);
-			//   };
-			//   imageReaction.awaitReactions(filter, { time: 15000, errors: ["time"] });
-			// .then(collected => {
-			//   const reaction = collected.first();
-			//   if (reaction.emoji.name === "◀️") {
-			//     message.reply("back");
-			//     return ["◀️", "▶️"].includes(reaction.emoji.name);
-			//   } else if (reaction.emoji.name === "▶️") {
-			//     message.reply("forward");
-			//   }
-			// })
-			// .catch(collected => {
-			//   console.log(
-			//     `After a minute, only ${collected.size} out of 2 reacted.`
-			//   );
-			//   message.reply("you didn't react");
-			// });
+					collector.on("collect", async (button) => {
+						button.deferUpdate();
+
+						if (button.customId === "primary") {
+							if (page > 1) {
+								page--;
+							}
+						} else if (button.customId === "secondary") {
+							page++;
+						}
+
+						let [result2] = await images.search(cleanTerm, { page: page });
+
+						imageEmbed2 = new MessageEmbed()
+							.setColor("0xffd465")
+							.setImage(result2.url);
+
+						msg.edit({ embeds: [imageEmbed2] });
+					});
+				});
 		} catch (err) {
 			console.error(err);
 		}
