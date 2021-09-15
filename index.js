@@ -27,17 +27,17 @@ changeStatus = async () => {
 	while (true) {
 		await jackie.user.setPresence({
 			status: "online",
-			game: { name: "nice with her bot friends" },
+			activities: [{ name: "nice with her bot friends" }],
 		});
 		await new Promise((resolve) => setTimeout(resolve, 10000));
 		await jackie.user.setPresence({
 			status: "dnd",
-			game: { name: "house" },
+			activities: [{ name: "house" }],
 		});
 		await new Promise((resolve) => setTimeout(resolve, 10000));
 		await jackie.user.setPresence({
 			status: "idle",
-			game: { name: "Playing Playing" },
+			activities: [{ name: "Playing Playing" }],
 		});
 		await new Promise((resolve) => setTimeout(resolve, 10000));
 	}
