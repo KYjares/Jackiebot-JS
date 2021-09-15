@@ -17,12 +17,13 @@ module.exports = {
 		let tool = ["rock", "paper", "scissors"];
 		let tool_choice = tool[Math.floor(Math.random() * 3)];
 
-		const collector = new Discord.MessageCollector(
-			message.channel,
-			(m) => m.author.id === message.author.id,
-			{ time: 10000 }
-		);
-		console.log(collector);
+		const filter = (m) => m.author.id === message.author.id;
+		const collector = message.channel.createMessageCollector({
+			filter,
+			max: 1,
+			time: 6000,
+			errors: ["time"],
+		});
 		collector.on("collect", (message) => {
 			message.channel.send("I chose " + tool_choice);
 
@@ -49,8 +50,10 @@ module.exports = {
 			return message.channel.send(response);
 		});
 
-		collector.on("end", (collected, reason) => {
-			message.channel.send("Too late! Times up!");
+		collector.on("end", (collected) => {
+			if (collected.size == 0) {
+				message.channel.send("Too late! Times up!");
+			}
 		});
 	},
 };
